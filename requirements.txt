@@ -1,0 +1,10 @@
+lightning>=2.6.6
+numpy>=2.4.6
+pandas>=3.0.6
+PyYAML>=6.0.3
+scikit-learn>=1.9.1
+torch>=2.14.0
+torchvision>=0.29.0
+tqdm>=4.70.1
+python-calamine>=0.8.3
+matplotlib>=3.11.2

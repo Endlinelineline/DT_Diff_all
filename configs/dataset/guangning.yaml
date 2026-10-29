@@ -1,0 +1,24 @@
+data: guangning
+root_path: F:/DeepLearning/datasets/electic/风电数据集/guangningshuju
+data_path: processed/guangning_power_1min.csv
+features: M
+target: turbine_16
+condition: fcst
+start: "2026-05-01 00:00:00"
+end: "2026-09-09 23:59:00"
+frequency: 1min
+aggregation: last
+# A day is excluded when at least 12 turbines have >=60% zero-power minutes.
+shutdown_zero_fraction: 0.6
+shutdown_min_turbines: 12
+shutdown_min_valid_fraction: 0.8
+seq_len: 1440
+label_len: 48
+pred_len: 60
+batch_size: 32
+num_workers: 0
+train_stride: 1
+test_stride: 1
+kernel_size: 8
+rebuild_cache: false
+
