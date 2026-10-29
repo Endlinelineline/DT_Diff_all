@@ -207,8 +207,8 @@ class StrictAcc30ValidationSelector(Callback):
                 }
                 samples = pl_module.predict_step(device_batch, batch_index)
                 point_scaled = torch.median(
-                    samples[:, :, self.label_len:, :], dim=0
-                ).values
+                    samples[:, :, self.label_len:, :].cpu(), dim=0
+                ).values.to(pl_module.device)
                 prediction_kw = _inverse(point_scaled, self.dataset)
                 truth_kw = _inverse(truth_scaled, self.dataset)
                 scores.update(
@@ -478,7 +478,9 @@ def evaluate(args, model_class, checkpoint: str | None = None) -> dict:
                 truth_scaled = batch["x"][:, label_len:, :].to(device)
                 device_batch = {key: value.to(device) for key, value in batch.items()}
                 samples = model.predict_step(device_batch, batch_index)
-                point_scaled = torch.median(samples[:, :, label_len:, :], dim=0).values
+                point_scaled = torch.median(
+                    samples[:, :, label_len:, :].cpu(), dim=0
+                ).values.to(device)
                 predicted_kw = _inverse(point_scaled, dataset)
                 observed_kw = _inverse(truth_scaled, dataset)
                 metrics.update(predicted_kw, observed_kw)

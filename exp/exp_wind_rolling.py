@@ -268,7 +268,9 @@ def run_rolling_test(args, model_class) -> dict:
                 device=device,
             )
             samples = model.predict_step({"x": placeholder, "c": condition}, 0)
-            point_scaled = torch.median(samples[:, :, label_len:, :], dim=0).values
+            point_scaled = torch.median(
+                samples[:, :, label_len:, :].cpu(), dim=0
+            ).values.to(device)
             prediction_kw = _inverse(point_scaled, dataset)
             truth_kw = np.stack(
                 [dataset.values_kw[index + 1:index + pred_len + 1] for index in batch_indices]
