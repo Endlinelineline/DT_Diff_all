@@ -65,6 +65,8 @@ def load_configs(args) -> tuple[dict, dict]:
         data_config["num_workers"] = args.num_workers
     if getattr(args, "test_stride", None):
         data_config["test_stride"] = args.test_stride
+    if getattr(args, "pred_len", None) is not None:
+        data_config["pred_len"] = args.pred_len
     data_config["rebuild_cache"] = bool(getattr(args, "rebuild_cache", False))
     if getattr(args, "epochs", None):
         model_config["train_config"]["epochs"] = args.epochs
@@ -257,6 +259,10 @@ def train(args, model_class) -> dict:
         resume_checkpoint = Path(resume_checkpoint).resolve()
         if not resume_checkpoint.is_file():
             raise FileNotFoundError(f"Resume checkpoint not found: {resume_checkpoint}")
+        previous_horizon = int(load_run_config(resume_checkpoint)["data_config"]["pred_len"])
+        if getattr(args, "pred_len", None) is not None and args.pred_len != previous_horizon:
+            raise ValueError("--pred_len must match the resume checkpoint horizon")
+        data_config["pred_len"] = previous_horizon
     train_dataset, train_loader = data_provider(data_config, "train")
     # A forced rebuild must happen only once; otherwise constructing the
     # validation dataset would parse all 2,000+ Excel files a second time.

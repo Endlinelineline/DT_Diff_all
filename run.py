@@ -56,6 +56,11 @@ def build_parser() -> argparse.ArgumentParser:
     add_runtime_arguments(train_parser)
     train_parser.add_argument("--seed", type=int, default=2021)
     train_parser.add_argument("--epochs", type=int, default=None)
+    train_parser.add_argument(
+        "--pred_len", "--pred-len", type=int,
+        choices=(15, 30, 45, 60, 120), default=None,
+        help="forecast horizon in minutes (default: dataset configuration)",
+    )
     train_parser.add_argument("--smoke_test", "--smoke-test", action="store_true")
     train_parser.add_argument("--checkpoint_dir", "--checkpoint-dir", default=None)
     train_parser.add_argument("--results_dir", "--results-dir", default=None)

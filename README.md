@@ -15,7 +15,7 @@ F:\DeepLearning\projects\DiffDiff_Guangning_Wind
 - 模型：DiffDiff
 - 输入粒度：1 分钟
 - 输入窗口：过去 1440 分钟
-- 预测窗口：未来 60 分钟
+- 预测窗口：未来 15、30、45、60 或 120 分钟；默认 60 分钟
 - 建模方式：16 台风机功率作为 16 个通道，一次训练一个共享模型
 - 时间字段：`时间`
 - 功率字段：`风机-P`
@@ -100,6 +100,8 @@ PowerShell 不能直接执行 Bash 脚本，建议在项目根目录直接运行
 ```powershell
 & $projectPython -s run.py train --model DiffDiff --model_id guangning_16turbine --des joint_forecast --gpu 0 --batch_size 32 --epochs 100
 ```
+
+训练其他预测长度时加 `--pred_len 15|30|45|60|120`，并为每次实验指定不同的 `--setting`，例如 `--pred_len 30 --setting guangning_fullorders_H30_001`。每个预测长度需要独立训练；测试命令会从对应 checkpoint 的 `run_config.json` 读取预测长度，续训也会沿用原 checkpoint 的长度。请按顺序运行单卡实验。
 
 若需要在指定墙钟时间内结束本阶段（时间包含首次预处理），可加 `--max_wall_minutes 90`。程序会在训练批次边界停止，保留 `checkpoints/<setting>/last.ckpt` 和训练配置，并暂缓全量测评。之后用新 setting 从该 checkpoint 续训，避免覆盖上一阶段的权重：
 
