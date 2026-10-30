@@ -354,7 +354,7 @@ def create_wind_report(
     axis.bar(x - 0.19, [_plot_value(row["strict_acc30_pct"]) for row in curve], 0.38,
              color=colors, alpha=0.95, label="Full curve")
     axis.bar(x + 0.19, [_plot_value(row["strict_acc30_pct"]) for row in endpoint], 0.38,
-             color=colors, alpha=0.45, label="Minute-60 endpoint")
+             color=colors, alpha=0.45, label=f"Minute-{horizon} endpoint")
     axis.set_xticks(x, names, rotation=45)
     axis.set_xlabel("Turbine ID")
     axis.set_ylabel("Strict Acc30 (%)")
@@ -371,7 +371,7 @@ def create_wind_report(
         axis.bar(x - 0.19, [_plot_value(row[key]) for row in curve], 0.38,
                  color=colors, alpha=0.95, label="Full curve")
         axis.bar(x + 0.19, [_plot_value(row[key]) for row in endpoint], 0.38,
-                 color=colors, alpha=0.45, label="Minute-60 endpoint")
+                 color=colors, alpha=0.45, label=f"Minute-{horizon} endpoint")
         axis.set_ylabel(label)
         axis.grid(axis="y", alpha=0.2)
     axes[0].set_title("Error measures by turbine")
